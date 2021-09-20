@@ -1,18 +1,52 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
 
   return (
     <div className="App">
-      <Counter></Counter>
+      {/* <Counter></Counter> */}
+      <ExternalUsers></ExternalUsers>
     </div>
   );
 }
 
-// Declare component
+// Declare another Component
+function ExternalUsers() {
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(res => res.json())
+      .then(data => setUsers(data))
+  }, [])
+  return (
+    <div>
+      <h2>External Users</h2>
+      {
+        users.map(user => <User name={user.name} email={user.email}></User>)
+      }
+    </div>
+  )
+}
+function User(props) {
+  const userStyle = {
+    backgroundColor: 'skyblue',
+    color: 'white',
+    padding: '20px',
+    margin: '20px',
+    border: '3px solid blue'
+  }
+  return (
+    <div style={userStyle}>
+      <h2>Name: {props.name}</h2>
+      <h4>Email: {props.email}</h4>
+    </div>
+  )
+}
 
+
+// Declare component
 function Counter() {
   const [count, setCount] = useState(0);
   const handleClick = () => setCount(count + 1)
